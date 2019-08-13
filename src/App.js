@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import { Query } from 'react-apollo';
+import React from 'react';
+import {Query, Mutation} from 'react-apollo';
+
 import gql from 'graphql-tag';
 
 const ADD_STAR_REPOSITORY = gql `
@@ -55,6 +56,26 @@ const App = () => (
             <li key={repo.id}>
               <a href={repo.url}>{repo.name}</a>
               <button>{repo.stargazers.totalCount} Star</button>
+
+              {!repo.viewerHasStarred ? (
+                <Mutation
+                  mutation={ADD_STAR_REPOSITORY}
+                  variables={{ id: repo.id }}
+                >
+                  {(addStar, { data, loading, error }) => (
+                    <button onClick={addStar}>star</button>
+                  )}
+                </Mutation>
+                ) : (
+                <Mutation
+                  mutation={REMOVE_STAR_REPOSITORY}
+                  variables={{ id: repo.id }}
+                >
+                  {(addStar, { data, loading, error }) => (
+                    <button onClick={addStar}>unstar</button>
+                  )}
+                </Mutation>
+              )}
             </li>
           ))}
         </ul>
