@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ApolloClient from 'apollo-boost';
+import gql from "graphql-tag";
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 const client = new ApolloClient({
-  uri: 'https://api.github.com/grahql',
+  uri: 'https://api.github.com/graphql',
   request: operation => {
     operation.setContext({
       headers: {
@@ -17,6 +18,27 @@ const client = new ApolloClient({
     })
   }
 })
+
+const query = gql`
+  {
+    organization(login: "apollographql") {
+      repositories(first: 5) {
+        nodes {
+          id
+          name
+          url
+          viewerHasStarred
+          stargazers {
+            totalCount
+          }
+        }
+      }
+    }
+  }
+`
+client.query({
+  query
+}).then(result => console.log(result))
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
