@@ -20,26 +20,6 @@ const client = new ApolloClient({
   }
 })
 
-const query = gql`
-  {
-    organization(login: "apollographql") {
-      repositories(first: 5) {
-        nodes {
-          id
-          name
-          url
-          viewerHasStarred
-          stargazers {
-            totalCount
-          }
-        }
-      }
-    }
-  }
-`
-client.query({
-  query
-}).then(result => console.log(result))
 
 ReactDOM.render(
   <ApolloProvider client={client}>
